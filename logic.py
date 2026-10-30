@@ -1,1 +1,8 @@
-# бизнес-логика: дела, фильтры, статусы
+"""Бизнес-логика: дела, статусы, операции над списком."""
+
+
+class Task:
+    def __init__(self, title: str, deadline: str, done: bool = False):
+        self.title = title
+        self.deadline = deadline
+        self.done = done
