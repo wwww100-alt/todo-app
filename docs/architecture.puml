@@ -1,0 +1,20 @@
+@startuml
+title Архитектура: Список дел (To-Do List)
+
+actor "Пользователь" as user
+component "main.py\n(точка входа)" as main
+component "ui.py\n(интерфейс: меню, ввод/вывод)" as ui
+package "logic.py (бизнес-логика)" {
+  component "TaskManager\n(операции со списком)" as tm
+  component "Task\n(модель дела)" as task
+}
+component "storage.py\n(хранение)" as st
+database "tasks.txt" as file
+
+user --> ui : ввод команд / вывод списка
+main --> ui : запускает меню
+ui --> tm : вызывает операции
+tm --> task : создаёт и изменяет
+tm --> st : сохранить / загрузить
+st --> file : чтение / запись
+@enduml
