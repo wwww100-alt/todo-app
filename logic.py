@@ -1,3 +1,5 @@
+"""Бизнес-логика: дела, статусы, операции над списком."""
+
 class Task:
     """Дело в списке дел."""
     
@@ -15,11 +17,28 @@ class Task:
         status = "[x]" if self.done else "[ ]"
         return f"{status} {self.title} (срок: {self.deadline})"
 
+    def to_dict(self) -> dict:
+        return {"title": self.title, "deadline": self.deadline, "done": self.done}
+
+    @classmethod
+    def from_dict(cls, data: dict) -> "Task":
+        return cls(data["title"], data["deadline"], data.get("done", False))
+
+
 class TaskManager:
     """Управляет списком дел."""
     
-    def __init__(self):
+    def __init__(self, storage=None):
+        self.storage = storage
         self.tasks: list[Task] = []
+
+    def load(self) -> None:
+        if self.storage is not None:
+            self.tasks = self.storage.load()
+
+    def save(self) -> None:
+        if self.storage is not None:
+            self.storage.save(self.get_all())
 
     def add_task(self, title: str, deadline: str) -> Task:
         task = Task(title, deadline)
@@ -53,3 +72,7 @@ class TaskManager:
         """Поиск дел по подстроке в названии."""
         fragment = fragment.lower()
         return [task for task in self.tasks if fragment in task.title.lower()]
+
+    def get_sorted_by_deadline(self) -> list[Task]:
+        """Сортировка дел по сроку (для задания со звёздочкой)."""
+        return sorted(self.tasks, key=lambda t: t.deadline)
