@@ -48,3 +48,8 @@ class TaskManager:
 
     def count(self) -> int:
         return len(self.tasks)
+
+    def find_by_title(self, fragment: str) -> list[Task]:
+        """Поиск дел по подстроке в названии."""
+        fragment = fragment.lower()
+        return [task for task in self.tasks if fragment in task.title.lower()]
